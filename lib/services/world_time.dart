@@ -6,7 +6,7 @@ class WorldTime {
 
   late String location; //location name for the UI
   late String time; //time in that location
-git  late String flag; //url to an asset flag icon
+  late String flag; //url to an asset flag icon
   late String url; //location url for api endpoint
   bool? isDaytime; //true or false if day time or not
 
