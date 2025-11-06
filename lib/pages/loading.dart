@@ -11,32 +11,46 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
-
   void setupWorldTime() async {
-    WorldTime instance = WorldTime(location: 'Chicago', flag: 'germany.png', url: 'America/Chicago');
-    await instance.getTime();
-    Navigator.pushReplacementNamed(context, '/home', arguments: {
-      'location': instance.location,
-      'flag': instance.flag,
-      'time': instance.time,
-      'isDaytime': instance.isDaytime,
-    });
+    try {
+      WorldTime instance = WorldTime(
+        location: 'Chicago',
+        flag: 'usa.png',
+        url: 'America/Chicago',
+      );
+
+      await instance.getTime();
+
+      if (!mounted) return; // prevent calling Navigator after widget disposed
+      Navigator.pushReplacementNamed(context, '/home', arguments: {
+        'location': instance.location,
+        'flag': instance.flag,
+        'time': instance.time,
+        'isDaytime': instance.isDaytime,
+      });
+    } catch (e) {
+      debugPrint('Error in setupWorldTime: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load time data')),
+      );
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    setupWorldTime() ;
+    setupWorldTime();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightBlueAccent,
+    return const Scaffold(
+      backgroundColor: Colors.blueAccent,
       body: Center(
-          child: SpinKitSpinningLines(
+        child: SpinKitFadingCube(
           color: Colors.white,
-            size: 80.0,
+          size: 60.0,
         ),
       ),
     );
